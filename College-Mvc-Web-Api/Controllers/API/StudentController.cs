@@ -56,9 +56,17 @@ namespace College_Mvc_Web_Api.Controllers.API
                     connection.Open();
                     string query = $@"SELECT * FROM student WHERE Id = {id}";
                     SqlCommand command = new SqlCommand(query, connection);
-                    int rows = command.ExecuteNonQuery();
+                    SqlDataReader datadb = command.ExecuteReader();
+                    if (datadb.HasRows)
+                    {
+                        while (datadb.Read())
+                        {
+                            Student stu = new Student(datadb.GetString(1), datadb.GetString(2), datadb.GetDateTime(3), datadb.GetString(4), datadb.GetInt32(5));
+                            return Ok(new { stu });
+                        }
+                    }
                     connection.Close();
-                    return Ok(new { MESSAGE = "STUDENT AS BEEN SENDDED", rows });
+                    return Ok(new { MESSAGE = "NOT EXISST" });
                 }
             }
             catch (Exception err)
@@ -104,13 +112,13 @@ namespace College_Mvc_Web_Api.Controllers.API
             Get();
             try
             {
-                using(SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
                     string putQuery = $@"UPDATE student SET Fname='{value.firstName}',Lname='{value.lastName}',Birth='{value.Birth}',Email='{value.Email}',Year_study={value.StudyYear} 
                                        WHERE Id = {id}";
-                    SqlCommand sqlCommand = new SqlCommand(putQuery, connection); 
-                    int updaterow=sqlCommand.ExecuteNonQuery(); 
+                    SqlCommand sqlCommand = new SqlCommand(putQuery, connection);
+                    int updaterow = sqlCommand.ExecuteNonQuery();
                     connection.Close();
                 }
             }
@@ -130,17 +138,17 @@ namespace College_Mvc_Web_Api.Controllers.API
         {
             try
             {
-                using(SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
                     string deleteQuery = $@"DELETE FROM student WHERE Id = {id}";
                     SqlCommand deleteCommand = new SqlCommand(deleteQuery, connection);
-                    int deletedaterow=deleteCommand.ExecuteNonQuery();
+                    int deletedaterow = deleteCommand.ExecuteNonQuery();
                     connection.Close();
                 }
 
             }
-            catch(SqlException err)
+            catch (SqlException err)
             {
                 return Ok(err.Message);
             }
