@@ -48,7 +48,7 @@ namespace College_Mvc_Web_Api.Controllers.API
         // GET: api/Student/5
         public IHttpActionResult Get(int id)
         {
-            //Get();
+            
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -82,7 +82,7 @@ namespace College_Mvc_Web_Api.Controllers.API
         // POST: api/Student
         public IHttpActionResult Post([FromBody] Student value)
         {
-            Get();
+         
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -109,7 +109,7 @@ namespace College_Mvc_Web_Api.Controllers.API
         [HttpPut]
         public IHttpActionResult Put(int id, [FromBody] Student value)
         {
-            Get();
+            
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
